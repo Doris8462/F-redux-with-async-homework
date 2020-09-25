@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import loadingImg from '../../assets/loading.jpg';
 import loginFailed from '../../assets/loginFailed.jpg';
 
 class Home extends Component {
   render() {
     return (
+     this.props.fetchUserInfo.isFetching ? (
+        <h1>Loading...</h1>
+      ) : (
       <div className="main-view home">
         <h2>Practice</h2>
         <p>基于Redux-Data-Flow课程作业，对项目进行Reudx异步数据流改造，以满足以下要求：</p>
@@ -28,8 +32,12 @@ class Home extends Component {
           </li>
         </ol>
       </div>
-    );
+    ));
   }
 }
 
-export default Home;
+const mapStateToProps = ({ fetchUserInfo }) => ({
+  fetchUserInfo
+});
+
+export default connect(mapStateToProps)(Home);

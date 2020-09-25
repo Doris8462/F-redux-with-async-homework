@@ -12,10 +12,10 @@ class Menu extends Component {
           <li className="nav-item">
             <Link to="/">首页</Link>
           </li>
-          {this.props.userInfo.logged &&
+          {this.props.fetchUserInfo.isLoggedin &&
             modules.map(
               ({ name, path, permissionCode }) =>
-                this.props.userInfo.permissions.includes(permissionCode) && (
+              this.props.fetchUserInfo.data.permissions.includes(permissionCode) && (
                   <li className="nav-item" key={name}>
                     <Link to={path}>{name}</Link>
                   </li>
@@ -27,8 +27,8 @@ class Menu extends Component {
   }
 }
 
-const mapStateToProps = ({ userInfo }) => ({
-  userInfo
+const mapStateToProps = ({ fetchUserInfo }) => ({
+  fetchUserInfo
 });
 
 export default connect(mapStateToProps)(Menu);

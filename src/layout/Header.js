@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setUserInfo, clearUserInfo } from '../actions';
+import { fetchUserInfo, logOut } from '../actions';
 import './Header.scss';
 
 class Header extends Component {
-  switchLogin = () => {
-    if (this.props.userInfo.logged) {
-      this.props.handleSignOut();
+  handleOnClick = () => {
+    if (!this.props.fetchUserInfo.isLoggedin) {
+      this.props.handleFetchUserInfo();
     } else {
-      fetch('https://my-json-server.typicode.com/kevindongzg/demo/login')
-        .then(res => res.json())
-        .then(data => {
-          this.props.handleSignIn({ logged: true, ...data });
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      this.props.handleLogOut();
     }
   };
 
@@ -23,15 +16,15 @@ class Header extends Component {
     return (
       <header className="header">
         <div className="header-wrapper">
-          {this.props.userInfo.logged && (
+          {this.props.fetchUserInfo.isLoggedin && (
             <>
               <img src="https://avatars2.githubusercontent.com/u/40817605" alt="头像" />
               <span className="username">Kevin</span>
             </>
           )}
 
-          <a className="sign" onClick={this.switchLogin}>
-            {this.props.userInfo.logged ? 'Sign out' : 'Sign in'}
+          <a className="sign" onClick={this.handleOnClick}>
+            {this.props.fetchUserInfo.isLoggedin ? 'Sign out' : 'Sign in'}
           </a>
         </div>
       </header>
@@ -39,13 +32,17 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = ({ userInfo }) => ({
-  userInfo
+const mapStateToProps = state => ({
+  fetchUserInfo: state.fetchUserInfo
 });
 
-const mapDispatchToProps = {
-  handleSignIn: info => setUserInfo(info),
-  handleSignOut: () => clearUserInfo()
-};
+const mapDispatchToProps = dispatch => ({
+  handleFetchUserInfo: () => {
+    dispatch(fetchUserInfo());
+  },
+  handleLogOut: () => {
+    dispatch(logOut());
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

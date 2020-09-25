@@ -19,10 +19,10 @@ class App extends Component {
               <Route exact path="/">
                 <Home />
               </Route>
-              {this.props.userInfo.logged &&
+              {this.props.fetchUserInfo.isLoggedin &&
                 modules.map(
                   ({ path, component, permissionCode }) =>
-                    this.props.userInfo.permissions.includes(permissionCode) && (
+                  this.props.fetchUserInfo.data.permissions.includes(permissionCode) && (
                       <Route key={path} path={path}>
                         {component}
                       </Route>
@@ -39,8 +39,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ userInfo }) => ({
-  userInfo
+const mapStateToProps = ({ fetchUserInfo }) => ({
+  fetchUserInfo
 });
 
 export default connect(mapStateToProps)(App);
